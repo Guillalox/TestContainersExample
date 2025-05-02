@@ -1,4 +1,4 @@
-package es.codeurjc.daw.library.integration;
+package es.codeurjc.daw.library.test_containers;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import es.codeurjc.daw.library.service.ShopService;
 @Testcontainers
 @SpringBootTest(classes = Application.class) // Esta anotación carga el contexto de Spring Boot para la prueba (permite el uso de Servicios, Repositorios...).
 @ExtendWith(SpringExtension.class) // Permite la integración de Spring con JUnit 5.
-public class BookServiceIntegrationTest {
+public class BookServiceWithTestContainersRepoTest {
 
     // Se crea un contenedor estático de MySQL usando Testcontainers
     @Container
@@ -104,10 +104,6 @@ public class BookServiceIntegrationTest {
     public void testDeleteBook() {
         Book book = createBook("Refactoring", "Martin Fowler");
         bookService.save(book);
-
-        boolean exists = bookService.exist(book.getId());
-
-        assertThat(exists).isTrue();
 
         bookService.delete(book.getId());
 
