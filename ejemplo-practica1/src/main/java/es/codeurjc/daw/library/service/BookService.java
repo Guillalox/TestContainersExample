@@ -15,6 +15,12 @@ public class BookService {
 	@Autowired
 	private BookRepository repository;
 
+	public BookService(){}
+
+	public BookService(BookRepository repository) {
+		this.repository = repository;
+	}
+
 	public Optional<Book> findById(long id) {
 		return repository.findById(id);
 	}

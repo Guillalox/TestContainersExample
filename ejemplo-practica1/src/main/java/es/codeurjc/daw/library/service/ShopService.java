@@ -15,6 +15,12 @@ public class ShopService {
 	@Autowired
 	private ShopRepository repository;
 
+	public ShopService() {}
+
+	public ShopService(ShopRepository repository) {
+		this.repository = repository;
+	}
+
 	public Optional<Shop> findById(long id) {
 		return repository.findById(id);
 	}

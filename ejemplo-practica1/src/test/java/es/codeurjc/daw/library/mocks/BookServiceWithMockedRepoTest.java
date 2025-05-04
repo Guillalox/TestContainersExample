@@ -19,32 +19,24 @@ import es.codeurjc.daw.library.repository.BookRepository;
 import es.codeurjc.daw.library.repository.ShopRepository;
 import org.mockito.InjectMocks;
 
-@ExtendWith(MockitoExtension.class)
 public class BookServiceWithMockedRepoTest {
 
-    @Mock
     private BookRepository bookRepository;
-
-    @Mock
-    private ShopRepository shopRepository;
-
-    @InjectMocks
     private BookService bookService;
-
-    @InjectMocks
-    private ShopService shopService;
 
     private Book book;
     private Shop shop1;
-    private Shop shop2;
 
     @BeforeEach
     void setUp() {
+        this.bookRepository = mock(BookRepository.class);
+        this.bookService = new BookService(this.bookRepository);
+
         shop1 = new Shop();
         shop1.setId(1L);
         shop1.setName("Shop 1");
 
-        shop2 = new Shop();
+        Shop shop2 = new Shop();
         shop2.setId(2L);
         shop2.setName("Shop 2");
 
@@ -62,6 +54,9 @@ public class BookServiceWithMockedRepoTest {
 
         assertThat(found).isPresent();
         assertThat(found.get().getTitle()).isEqualTo("Clean Code");
+
+        verify(bookRepository, times(1)).save(any(Book.class));
+        verify(bookRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -71,6 +66,7 @@ public class BookServiceWithMockedRepoTest {
         boolean exists = bookService.exist(1L);
 
         assertThat(exists).isTrue();
+        verify(bookRepository, times(1)).existsById(1L);
     }
 
     @Test
@@ -82,6 +78,7 @@ public class BookServiceWithMockedRepoTest {
         Optional<Book> result = bookService.findById(1L);
 
         assertThat(result).isEmpty();
+        verify(bookRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -94,5 +91,6 @@ public class BookServiceWithMockedRepoTest {
         List<Book> allBooks = bookService.findAll();
 
         assertThat(allBooks).hasSize(2);
+        verify(bookRepository, times(1)).findAll();
     }
 }
